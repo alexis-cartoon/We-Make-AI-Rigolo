@@ -11,21 +11,21 @@
     --text: #1a1a18; --text2: #5f5e5a; --text3: #888780;
     --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
     --radius: 8px; --radius-lg: 12px;
-    --green-bg: #EAF3DE; --green-text: #27500A;
-    --amber-bg: #FAEEDA; --amber-text: #633806;
-    --blue-bg:  #E6F1FB; --blue-text:  #0C447C;
-    --gray-bg:  #F1EFE8; --gray-text:  #5F5E5A;
+    --green-bg:#EAF3DE; --green-text:#27500A;
+    --amber-bg:#FAEEDA; --amber-text:#633806;
+    --blue-bg:#E6F1FB;  --blue-text:#0C447C;
+    --gray-bg:#F1EFE8;  --gray-text:#5F5E5A;
     --green-dot:#639922; --amber-dot:#BA7517; --blue-dot:#185FA5; --gray-dot:#888780;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #323230;
-      --text: #e8e6de; --text2: #b4b2a9; --text3: #888780;
-      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
+      --bg:#1e1e1c; --bg2:#2a2a27; --bg3:#323230;
+      --text:#e8e6de; --text2:#b4b2a9; --text3:#888780;
+      --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.22);
       --green-bg:#3B6D11; --green-text:#C0DD97;
       --amber-bg:#854F0B; --amber-text:#FAC775;
-      --blue-bg: #0C447C; --blue-text: #B5D4F4;
-      --gray-bg: #444441; --gray-text: #B4B2A9;
+      --blue-bg:#0C447C;  --blue-text:#B5D4F4;
+      --gray-bg:#444441;  --gray-text:#B4B2A9;
     }
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
@@ -44,19 +44,15 @@
   .row { display: flex; gap: 12px; margin-bottom: 12px; }
   .field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
   .field label { font-size: 13px; color: var(--text2); }
-  .field input, .field select {
-    font-size: 14px; width: 100%; padding: 7px 10px;
-    border: 0.5px solid var(--border2); border-radius: var(--radius);
-    background: var(--bg); color: var(--text); outline: none;
-  }
+  .field input, .field select { font-size: 14px; width: 100%; padding: 7px 10px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; }
   .field input:focus, .field select:focus { border-color: var(--text); }
   .q-row { display: flex; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
   .q-row:last-child { border-bottom: none; }
   .q-ref { font-size: 12px; font-weight: 500; color: var(--text3); min-width: 24px; padding-top: 2px; }
   .q-body { flex: 1; }
   .q-text { font-size: 14px; line-height: 1.5; margin-bottom: 8px; }
-  .q-legend { display: flex; gap: 6px; margin-bottom: 6px; }
-  .q-legend span { font-size: 11px; color: var(--text3); flex: 1; text-align: center; }
+  .q-legend { display: flex; gap: 6px; margin-bottom: 4px; }
+  .q-legend span { font-size: 11px; color: var(--text3); flex: 1; text-align: center; line-height: 1.3; }
   .q-opts { display: flex; gap: 6px; }
   .q-btn { flex: 1; padding: 5px 0; font-size: 13px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: none; cursor: pointer; color: var(--text2); text-align: center; }
   .q-btn.sel { background: var(--text); color: var(--bg); border-color: var(--text); }
@@ -77,11 +73,7 @@
   textarea:focus { border-color: var(--text); }
   .msg { font-size: 13px; color: var(--text2); }
   .matrix-wrap { position: relative; }
-  .tooltip {
-    position: absolute; background: var(--bg); border: 0.5px solid var(--border2);
-    border-radius: var(--radius); padding: 8px 12px; font-size: 13px;
-    pointer-events: none; display: none; z-index: 10; min-width: 180px; line-height: 1.6;
-  }
+  .tooltip { position: absolute; background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 8px 12px; font-size: 13px; pointer-events: none; display: none; z-index: 10; min-width: 180px; line-height: 1.6; }
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--text); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading { font-size: 13px; color: var(--text2); padding: 1rem 0; }
@@ -91,14 +83,12 @@
 <div class="app">
   <p class="subtitle">Can we? Should we?</p>
   <h1>AI delegation tool</h1>
-
   <div class="tabs">
     <button class="tab active" onclick="switchTab('evaluate')">Evaluate a task</button>
     <button class="tab" onclick="switchTab('feedback')">Post-test feedback</button>
     <button class="tab" onclick="switchTab('map')">Collective map</button>
   </div>
 
-  <!-- EVALUATE -->
   <div id="panel-evaluate" class="panel active">
     <div class="section">
       <div class="row">
@@ -143,7 +133,6 @@
     </div>
   </div>
 
-  <!-- FEEDBACK -->
   <div id="panel-feedback" class="panel">
     <div class="section">
       <div class="row">
@@ -178,7 +167,6 @@
     </div>
   </div>
 
-  <!-- MAP -->
   <div id="panel-map" class="panel">
     <div class="section-label" style="margin-bottom:1rem;">All submitted tasks — hover a dot for details</div>
     <div id="map-loading" class="loading"><span class="spinner"></span>Loading tasks...</div>
@@ -206,9 +194,9 @@ const QB = [
   { ref:'B3', text:'What is the cost of an error on this task?', labels:['Low','Medium','High'] },
 ];
 const QF = [
-  { ref:'gain',     text:'Real time savings',      labels:['None','Partial','Significant'] },
-  { ref:'quality',  text:'Quality of AI output',   labels:['Insufficient','Acceptable','Good'] },
-  { ref:'friction', text:'Friction experienced',   labels:['Very smooth','Some adjustments','A lot of friction'] },
+  { ref:'gain',     text:'Real time savings',    labels:['None','Partial','Significant'] },
+  { ref:'quality',  text:'Quality of AI output', labels:['Insufficient','Acceptable','Good'] },
+  { ref:'friction', text:'Friction experienced', labels:['Very smooth','Some adjustments','A lot of friction'] },
 ];
 
 const QUAD_INFO = {
@@ -217,27 +205,32 @@ const QUAD_INFO = {
   human:       { label:'Keep it human',     desc:'Guideline, not a judgment. The task is central and AI can\'t do it correctly yet.', dot:'#185FA5' },
   notpriority: { label:'Not a priority',    desc:'Neither feasible nor useful to delegate right now. Revisit in a few months.', dot:'#888780' },
 };
-
 const QUAD_FILL = {
-  light: { opportunity:'#EAF3DE', tension:'#FAEEDA', human:'#E6F1FB', notpriority:'#F1EFE8' },
-  dark:  { opportunity:'#3B6D11', tension:'#854F0B', human:'#0C447C', notpriority:'#444441' },
+  light:{ opportunity:'#EAF3DE', tension:'#FAEEDA', human:'#E6F1FB', notpriority:'#F1EFE8' },
+  dark: { opportunity:'#3B6D11', tension:'#854F0B', human:'#0C447C', notpriority:'#444441' },
 };
 const QUAD_TEXT = {
-  light: { opportunity:'#27500A', tension:'#633806', human:'#0C447C', notpriority:'#5F5E5A' },
-  dark:  { opportunity:'#C0DD97', tension:'#FAC775', human:'#B5D4F4', notpriority:'#B4B2A9' },
+  light:{ opportunity:'#27500A', tension:'#633806', human:'#0C447C', notpriority:'#5F5E5A' },
+  dark: { opportunity:'#C0DD97', tension:'#FAC775', human:'#B5D4F4', notpriority:'#B4B2A9' },
 };
 
 let sc = {}, fbSc = {}, tasks = [], mapLoaded = false;
 
-function getQ(a, b) {
-  if (a >= 2 && b >= 2) return 'tension';
-  if (a >= 2 && b < 2)  return 'opportunity';
-  if (a < 2  && b >= 2) return 'human';
-  return 'notpriority';
-}
-function avg(keys) {
-  const v = keys.map(k => sc[k]).filter(x => x !== undefined);
-  return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null;
+function getQ(a,b){ if(a>=2&&b>=2)return'tension'; if(a>=2&&b<2)return'opportunity'; if(a<2&&b>=2)return'human'; return'notpriority'; }
+function avg(keys){ const v=keys.map(k=>sc[k]).filter(x=>x!==undefined); return v.length?v.reduce((a,b)=>a+b,0)/v.length:null; }
+
+function jsonp(params) {
+  return new Promise((resolve, reject) => {
+    const cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+    const url = SCRIPT_URL + '?' + new URLSearchParams({...params, callback: cb});
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 10000);
+    window[cb] = (data) => { cleanup(); resolve(data); };
+    function cleanup(){ clearTimeout(timeout); delete window[cb]; if(script.parentNode) script.parentNode.removeChild(script); }
+    script.onerror = () => { cleanup(); reject(new Error('Script error')); };
+    script.src = url;
+    document.head.appendChild(script);
+  });
 }
 
 function populateSelects() {
@@ -247,237 +240,192 @@ function populateSelects() {
 }
 
 function renderBlock(id, questions, defaults) {
-  document.getElementById(id).innerHTML = questions.map(q => `
+  document.getElementById(id).innerHTML = questions.map(q=>`
     <div class="q-row">
       <span class="q-ref">${q.ref}</span>
       <div class="q-body">
         <div class="q-text">${q.text}</div>
-        <div class="q-legend">
-          ${q.labels.map(l=>`<span>${l}</span>`).join('')}
-        </div>
-        <div class="q-opts">
-          ${q.labels.map((_,i)=>`<button class="q-btn${defaults&&defaults[q.ref]===i+1?' sel':''}" onclick="pick('${q.ref}',${i+1},this)">${i+1}</button>`).join('')}
-        </div>
+        <div class="q-legend">${q.labels.map(l=>`<span>${l}</span>`).join('')}</div>
+        <div class="q-opts">${q.labels.map((_,i)=>`<button class="q-btn${defaults&&defaults[q.ref]===i+1?' sel':''}" onclick="pick('${q.ref}',${i+1},this)">${i+1}</button>`).join('')}</div>
       </div>
     </div>`).join('');
-  if (defaults) { questions.forEach(q=>{ sc[q.ref]=defaults[q.ref]; }); refreshScores(); }
+  if(defaults){ questions.forEach(q=>{ sc[q.ref]=defaults[q.ref]; }); refreshScores(); }
 }
 
 function renderFbBlock(defaults) {
-  document.getElementById('block-fb').innerHTML = QF.map(q => `
+  document.getElementById('block-fb').innerHTML = QF.map(q=>`
     <div class="q-row">
       <div class="q-body" style="flex:1;">
         <div class="q-text">${q.text}</div>
-        <div class="q-legend">
-          ${q.labels.map(l=>`<span>${l}</span>`).join('')}
-        </div>
-        <div class="q-opts">
-          ${q.labels.map((_,i)=>`<button class="q-btn${defaults&&defaults[q.ref]===i+1?' sel':''}" onclick="pickFb('${q.ref}',${i+1},this)">${i+1}</button>`).join('')}
-        </div>
+        <div class="q-legend">${q.labels.map(l=>`<span>${l}</span>`).join('')}</div>
+        <div class="q-opts">${q.labels.map((_,i)=>`<button class="q-btn${defaults&&defaults[q.ref]===i+1?' sel':''}" onclick="pickFb('${q.ref}',${i+1},this)">${i+1}</button>`).join('')}</div>
       </div>
     </div>`).join('');
-  if (defaults) { QF.forEach(q=>{ fbSc[q.ref]=defaults[q.ref]; }); refreshFbVerdict(); }
+  if(defaults){ QF.forEach(q=>{ fbSc[q.ref]=defaults[q.ref]; }); refreshFbVerdict(); }
 }
 
-function pick(ref, val, btn) {
-  sc[ref] = val;
-  btn.closest('.q-opts').querySelectorAll('.q-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  refreshScores();
-}
-function pickFb(ref, val, btn) {
-  fbSc[ref] = val;
-  btn.closest('.q-opts').querySelectorAll('.q-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  refreshFbVerdict();
-}
+function pick(ref,val,btn){ sc[ref]=val; btn.closest('.q-opts').querySelectorAll('.q-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); refreshScores(); }
+function pickFb(ref,val,btn){ fbSc[ref]=val; btn.closest('.q-opts').querySelectorAll('.q-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); refreshFbVerdict(); }
 
 function refreshScores() {
-  const a = avg(['A1','A2','A3','A4']);
-  const b = avg(['B1','B2','B3']);
-  if (a!==null) { document.getElementById('bar-a').style.width=((a-1)/2*100)+'%'; document.getElementById('val-a').textContent=a.toFixed(1); }
-  if (b!==null) { document.getElementById('bar-b').style.width=((b-1)/2*100)+'%'; document.getElementById('val-b').textContent=b.toFixed(1); }
-  if (QA.every(q=>sc[q.ref]) && QB.every(q=>sc[q.ref]) && a!==null && b!==null) {
-    const qi = QUAD_INFO[getQ(a,b)];
-    document.getElementById('result-label').textContent = qi.label;
-    document.getElementById('result-desc').textContent = qi.desc;
-    document.getElementById('result-area').style.display = 'block';
+  const a=avg(['A1','A2','A3','A4']), b=avg(['B1','B2','B3']);
+  if(a!==null){ document.getElementById('bar-a').style.width=((a-1)/2*100)+'%'; document.getElementById('val-a').textContent=a.toFixed(1); }
+  if(b!==null){ document.getElementById('bar-b').style.width=((b-1)/2*100)+'%'; document.getElementById('val-b').textContent=b.toFixed(1); }
+  if(QA.every(q=>sc[q.ref])&&QB.every(q=>sc[q.ref])&&a!==null&&b!==null){
+    const qi=QUAD_INFO[getQ(a,b)];
+    document.getElementById('result-label').textContent=qi.label;
+    document.getElementById('result-desc').textContent=qi.desc;
+    document.getElementById('result-area').style.display='block';
   }
 }
 
 function refreshFbVerdict() {
-  const { gain, quality, friction } = fbSc;
-  if (!gain || !quality || !friction) return;
-  let v, d;
-  if (gain >= 2 && quality >= 2 && friction <= 2) { v='Integrate'; d='Time saved, quality met, friction manageable. Roll this out.'; }
-  else if (gain >= 2 || quality >= 2) { v='Adjust before integrating'; d='Some value, but needs refinement before becoming a default.'; }
-  else { v='Abandon'; d='Not worth the cost right now. Park it.'; }
-  document.getElementById('fb-verdict').textContent = v;
-  document.getElementById('fb-verdict-desc').textContent = d;
-  document.getElementById('fb-result-area').style.display = 'block';
-}
-
-async function apiFetch(params) {
-  const url = SCRIPT_URL + '?' + new URLSearchParams(params);
-  const r = await fetch(url);
-  return r.json();
-}
-async function apiPost(data) {
-  const r = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(data) });
-  return r.json();
+  const {gain,quality,friction}=fbSc;
+  if(!gain||!quality||!friction) return;
+  let v,d;
+  if(gain>=2&&quality>=2&&friction<=2){v='Integrate';d='Time saved, quality met, friction manageable. Roll this out.';}
+  else if(gain>=2||quality>=2){v='Adjust before integrating';d='Some value, but needs refinement before becoming a default.';}
+  else{v='Abandon';d='Not worth the cost right now. Park it.';}
+  document.getElementById('fb-verdict').textContent=v;
+  document.getElementById('fb-verdict-desc').textContent=d;
+  document.getElementById('fb-result-area').style.display='block';
 }
 
 async function loadTasks() {
   try {
-    const data = await apiFetch({ action:'getTasks' });
-    tasks = Array.isArray(data) ? data.map(t => ({
-      name: t.name, author: t.author,
-      sA: parseFloat(t.scoreA), sB: parseFloat(t.scoreB),
-      q: t.quadrant
-    })) : [];
+    const data = await jsonp({ action:'getTasks' });
+    tasks = Array.isArray(data) ? data.map(t=>({ name:t.name, author:t.author, sA:parseFloat(t.scoreA), sB:parseFloat(t.scoreB), q:t.quadrant })) : [];
   } catch(e) { tasks = []; }
   refreshFbTaskSelect();
 }
 
 function refreshFbTaskSelect() {
-  const s = document.getElementById('fb-task');
-  const cur = s.value;
-  s.innerHTML = '<option value="">— select a task —</option>' + tasks.map(t=>`<option value="${t.name}">${t.name} — ${t.author}</option>`).join('');
-  if (cur) s.value = cur;
+  const s=document.getElementById('fb-task');
+  const cur=s.value;
+  s.innerHTML='<option value="">— select a task —</option>'+tasks.map(t=>`<option value="${t.name}">${t.name} — ${t.author}</option>`).join('');
+  if(cur) s.value=cur;
 }
 
 async function submitTask() {
-  const name = document.getElementById('task-name').value.trim();
-  const author = document.getElementById('task-author').value;
-  const a = avg(['A1','A2','A3','A4']);
-  const b = avg(['B1','B2','B3']);
-  const msg = document.getElementById('eval-msg');
-  if (!name)   { msg.textContent='Please enter a task name.'; return; }
-  if (!author) { msg.textContent='Please select your name.'; return; }
-  if (!QA.every(q=>sc[q.ref]) || !QB.every(q=>sc[q.ref])) { msg.textContent='Please answer all questions.'; return; }
-  msg.innerHTML = '<span class="spinner"></span>Saving...';
+  const name=document.getElementById('task-name').value.trim();
+  const author=document.getElementById('task-author').value;
+  const a=avg(['A1','A2','A3','A4']), b=avg(['B1','B2','B3']);
+  const msg=document.getElementById('eval-msg');
+  if(!name){msg.textContent='Please enter a task name.';return;}
+  if(!author){msg.textContent='Please select your name.';return;}
+  if(!QA.every(q=>sc[q.ref])||!QB.every(q=>sc[q.ref])){msg.textContent='Please answer all questions.';return;}
+  msg.innerHTML='<span class="spinner"></span>Saving...';
   try {
-    await apiPost({ action:'postTask', name, author, ...sc, scoreA: parseFloat(a.toFixed(2)), scoreB: parseFloat(b.toFixed(2)), quadrant: getQ(a,b) });
+    await jsonp({ action:'postTask', name, author, ...sc, scoreA:parseFloat(a.toFixed(2)), scoreB:parseFloat(b.toFixed(2)), quadrant:getQ(a,b) });
     await loadTasks();
-    mapLoaded = false;
-    msg.textContent = '✓ Task submitted.';
-    setTimeout(()=>{ msg.textContent=''; }, 2500);
-  } catch(e) { msg.textContent = 'Error saving. Please retry.'; }
+    mapLoaded=false;
+    msg.textContent='✓ Task submitted.';
+    setTimeout(()=>{msg.textContent='';},2500);
+  } catch(e){ msg.textContent='Error saving. Please retry.'; }
 }
 
 async function submitFeedback() {
-  const task = document.getElementById('fb-task').value;
-  const author = document.getElementById('fb-author').value;
-  const msg = document.getElementById('fb-msg');
-  if (!task || !author) { msg.textContent='Please select a task and your name.'; return; }
-  if (!QF.every(q=>fbSc[q.ref])) { msg.textContent='Please answer all criteria.'; return; }
-  const { gain, quality, friction } = fbSc;
-  let verdict;
-  if (gain >= 2 && quality >= 2 && friction <= 2) verdict = 'Integrate';
-  else if (gain >= 2 || quality >= 2) verdict = 'Adjust';
-  else verdict = 'Abandon';
-  msg.innerHTML = '<span class="spinner"></span>Saving...';
+  const task=document.getElementById('fb-task').value;
+  const author=document.getElementById('fb-author').value;
+  const msg=document.getElementById('fb-msg');
+  if(!task||!author){msg.textContent='Please select a task and your name.';return;}
+  if(!QF.every(q=>fbSc[q.ref])){msg.textContent='Please answer all criteria.';return;}
+  const {gain,quality,friction}=fbSc;
+  const verdict=gain>=2&&quality>=2&&friction<=2?'Integrate':(gain>=2||quality>=2?'Adjust':'Abandon');
+  msg.innerHTML='<span class="spinner"></span>Saving...';
   try {
-    await apiPost({ action:'postFeedback', task, author, ...fbSc, comment: document.getElementById('fb-comment').value, verdict });
-    msg.textContent = '✓ Feedback submitted.';
-    setTimeout(()=>{ msg.textContent=''; }, 2500);
-  } catch(e) { msg.textContent = 'Error saving. Please retry.'; }
+    await jsonp({ action:'postFeedback', task, author, ...fbSc, comment:document.getElementById('fb-comment').value||'', verdict });
+    msg.textContent='✓ Feedback submitted.';
+    setTimeout(()=>{msg.textContent='';},2500);
+  } catch(e){ msg.textContent='Error saving. Please retry.'; }
 }
 
 function resetEval() {
-  sc = {};
-  document.getElementById('task-name').value = '';
-  document.getElementById('task-author').value = '';
-  document.getElementById('result-area').style.display = 'none';
-  ['bar-a','bar-b'].forEach(id=>{ document.getElementById(id).style.width='0%'; });
-  ['val-a','val-b'].forEach(id=>{ document.getElementById(id).textContent='—'; });
-  renderBlock('block-a', QA, null);
-  renderBlock('block-b', QB, null);
+  sc={};
+  document.getElementById('task-name').value='';
+  document.getElementById('task-author').value='';
+  document.getElementById('result-area').style.display='none';
+  ['bar-a','bar-b'].forEach(id=>{document.getElementById(id).style.width='0%';});
+  ['val-a','val-b'].forEach(id=>{document.getElementById(id).textContent='—';});
+  renderBlock('block-a',QA,null);
+  renderBlock('block-b',QB,null);
 }
 
 function switchTab(tab) {
   ['evaluate','feedback','map'].forEach((t,i)=>{
-    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
-    document.querySelectorAll('.tab')[i].classList.toggle('active', t===tab);
+    document.getElementById('panel-'+t).classList.toggle('active',t===tab);
+    document.querySelectorAll('.tab')[i].classList.toggle('active',t===tab);
   });
-  if (tab==='map' && !mapLoaded) { mapLoaded=true; renderMatrix(); }
+  if(tab==='map'&&!mapLoaded){ mapLoaded=true; renderMatrix(); }
 }
 
 async function renderMatrix() {
-  document.getElementById('map-loading').style.display = 'block';
-  document.getElementById('map-wrap').style.display = 'none';
+  document.getElementById('map-loading').style.display='block';
+  document.getElementById('map-wrap').style.display='none';
   await loadTasks();
-  document.getElementById('map-loading').style.display = 'none';
-  document.getElementById('map-wrap').style.display = 'block';
+  document.getElementById('map-loading').style.display='none';
+  document.getElementById('map-wrap').style.display='block';
 
-  const svg = document.getElementById('matrix-svg');
-  const W=620, H=520;
-  const pad={top:44,right:44,bottom:64,left:64};
-  const iW=W-pad.left-pad.right, iH=H-pad.top-pad.bottom;
-  const cx=pad.left+iW/2, cy=pad.top+iH/2;
-  const dark = window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const fills = dark ? QUAD_FILL.dark : QUAD_FILL.light;
-  const texts = dark ? QUAD_TEXT.dark : QUAD_TEXT.light;
-  const muted = '#888780';
-  const border = dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
+  const svg=document.getElementById('matrix-svg');
+  const W=620,H=520,pad={top:44,right:44,bottom:64,left:64};
+  const iW=W-pad.left-pad.right,iH=H-pad.top-pad.bottom;
+  const cx=pad.left+iW/2,cy=pad.top+iH/2;
+  const dark=window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const fills=dark?QUAD_FILL.dark:QUAD_FILL.light;
+  const texts=dark?QUAD_TEXT.dark:QUAD_TEXT.light;
+  const muted='#888780', border=dark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)';
+  function toX(a){return pad.left+((a-1)/2)*iW;}
+  function toY(b){return pad.top+iH-((b-1)/2)*iH;}
 
-  function toX(a){ return pad.left+((a-1)/2)*iW; }
-  function toY(b){ return pad.top+iH-((b-1)/2)*iH; }
-
-  const quads = [
-    { id:'human',       x:pad.left, y:pad.top, w:iW/2, h:iH/2, label:'Keep it human',    ax:'start', lx:pad.left+10,    ly:pad.top+22 },
-    { id:'tension',     x:cx,       y:pad.top, w:iW/2, h:iH/2, label:'Zone of tension',   ax:'end',   lx:pad.left+iW-10, ly:pad.top+22 },
-    { id:'notpriority', x:pad.left, y:cy,      w:iW/2, h:iH/2, label:'Not a priority',    ax:'start', lx:pad.left+10,    ly:cy+22 },
-    { id:'opportunity', x:cx,       y:cy,      w:iW/2, h:iH/2, label:'Clear opportunity', ax:'end',   lx:pad.left+iW-10, ly:cy+22 },
+  const quads=[
+    {id:'human',      x:pad.left,y:pad.top,w:iW/2,h:iH/2,label:'Keep it human',   ax:'start',lx:pad.left+10,   ly:pad.top+22},
+    {id:'tension',    x:cx,      y:pad.top,w:iW/2,h:iH/2,label:'Zone of tension',  ax:'end',  lx:pad.left+iW-10,ly:pad.top+22},
+    {id:'notpriority',x:pad.left,y:cy,     w:iW/2,h:iH/2,label:'Not a priority',   ax:'start',lx:pad.left+10,   ly:cy+22},
+    {id:'opportunity',x:cx,      y:cy,     w:iW/2,h:iH/2,label:'Clear opportunity',ax:'end',  lx:pad.left+iW-10,ly:cy+22},
   ];
 
-  let html = `<rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
+  let html=`<rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
   quads.forEach(q=>{
-    html += `<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" fill="${fills[q.id]}"/>`;
-    html += `<text x="${q.lx}" y="${q.ly}" font-size="13" font-family="inherit" font-weight="500" fill="${texts[q.id]}" text-anchor="${q.ax}">${q.label}</text>`;
+    html+=`<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" fill="${fills[q.id]}"/>`;
+    html+=`<text x="${q.lx}" y="${q.ly}" font-size="13" font-family="inherit" font-weight="500" fill="${texts[q.id]}" text-anchor="${q.ax}">${q.label}</text>`;
   });
-  html += `<line x1="${cx}" y1="${pad.top}" x2="${cx}" y2="${pad.top+iH}" stroke="${border}" stroke-width="1"/>`;
-  html += `<line x1="${pad.left}" y1="${cy}" x2="${pad.left+iW}" y2="${cy}" stroke="${border}" stroke-width="1"/>`;
-  html += `<rect x="${pad.left}" y="${pad.top}" width="${iW}" height="${iH}" fill="none" stroke="${border}" stroke-width="0.5"/>`;
-  html += `<text x="${pad.left+iW/2}" y="${H-14}" font-size="12" font-family="inherit" fill="${muted}" text-anchor="middle">Can we? (score A →)</text>`;
-  html += `<text x="14" y="${pad.top+iH/2}" font-size="12" font-family="inherit" fill="${muted}" text-anchor="middle" transform="rotate(-90,14,${pad.top+iH/2})">Should we? (score B ↑)</text>`;
+  html+=`<line x1="${cx}" y1="${pad.top}" x2="${cx}" y2="${pad.top+iH}" stroke="${border}" stroke-width="1"/>`;
+  html+=`<line x1="${pad.left}" y1="${cy}" x2="${pad.left+iW}" y2="${cy}" stroke="${border}" stroke-width="1"/>`;
+  html+=`<rect x="${pad.left}" y="${pad.top}" width="${iW}" height="${iH}" fill="none" stroke="${border}" stroke-width="0.5"/>`;
+  html+=`<text x="${pad.left+iW/2}" y="${H-14}" font-size="12" font-family="inherit" fill="${muted}" text-anchor="middle">Can we? (score A →)</text>`;
+  html+=`<text x="14" y="${pad.top+iH/2}" font-size="12" font-family="inherit" fill="${muted}" text-anchor="middle" transform="rotate(-90,14,${pad.top+iH/2})">Should we? (score B ↑)</text>`;
   [1,1.5,2,2.5,3].forEach(v=>{
-    html += `<text x="${toX(v)}" y="${pad.top+iH+18}" font-size="11" font-family="inherit" fill="${muted}" text-anchor="middle">${v}</text>`;
-    html += `<text x="${pad.left-8}" y="${toY(v)+4}" font-size="11" font-family="inherit" fill="${muted}" text-anchor="end">${v}</text>`;
+    html+=`<text x="${toX(v)}" y="${pad.top+iH+18}" font-size="11" font-family="inherit" fill="${muted}" text-anchor="middle">${v}</text>`;
+    html+=`<text x="${pad.left-8}" y="${toY(v)+4}" font-size="11" font-family="inherit" fill="${muted}" text-anchor="end">${v}</text>`;
   });
-
-  if (tasks.length === 0) {
-    html += `<text x="${pad.left+iW/2}" y="${pad.top+iH/2}" font-size="14" font-family="inherit" fill="${muted}" text-anchor="middle">No tasks submitted yet.</text>`;
+  if(tasks.length===0){
+    html+=`<text x="${pad.left+iW/2}" y="${pad.top+iH/2}" font-size="14" font-family="inherit" fill="${muted}" text-anchor="middle">No tasks submitted yet.</text>`;
   } else {
     tasks.forEach((t,i)=>{
-      const x=toX(t.sA), y=toY(t.sB);
-      html += `<circle cx="${x}" cy="${y}" r="9" fill="${QUAD_INFO[t.q]?.dot||'#888780'}" opacity="0.85" style="cursor:pointer" data-i="${i}"/>`;
+      html+=`<circle cx="${toX(t.sA)}" cy="${toY(t.sB)}" r="9" fill="${QUAD_INFO[t.q]?.dot||'#888'}" opacity="0.85" style="cursor:pointer" data-i="${i}"/>`;
     });
   }
+  svg.innerHTML=html;
 
-  svg.innerHTML = html;
-
-  const tip = document.getElementById('tip');
+  const tip=document.getElementById('tip');
   svg.querySelectorAll('circle').forEach(dot=>{
-    dot.addEventListener('mouseenter', ()=>{
-      const t = tasks[+dot.dataset.i];
-      if (!t) return;
-      const rect = svg.getBoundingClientRect();
-      const scaleX = rect.width/W, scaleY = rect.height/H;
-      const dx = parseFloat(dot.getAttribute('cx'))*scaleX;
-      const dy = parseFloat(dot.getAttribute('cy'))*scaleY;
-      tip.innerHTML = `<strong>${t.name}</strong><br><span style="color:var(--text2);font-size:12px;">${t.author}</span><br><span style="font-size:12px;margin-top:2px;display:block;">A: ${t.sA} · B: ${t.sB}</span><span style="font-size:12px;color:${QUAD_INFO[t.q]?.dot||'#888'}">${QUAD_INFO[t.q]?.label||''}</span>`;
+    dot.addEventListener('mouseenter',()=>{
+      const t=tasks[+dot.dataset.i]; if(!t) return;
+      const rect=svg.getBoundingClientRect();
+      const sx=rect.width/W, sy=rect.height/H;
+      const dx=parseFloat(dot.getAttribute('cx'))*sx, dy=parseFloat(dot.getAttribute('cy'))*sy;
+      tip.innerHTML=`<strong>${t.name}</strong><br><span style="color:var(--text2);font-size:12px;">${t.author}</span><br><span style="font-size:12px;display:block;margin-top:2px;">A: ${t.sA} · B: ${t.sB}</span><span style="font-size:12px;color:${QUAD_INFO[t.q]?.dot||'#888'}">${QUAD_INFO[t.q]?.label||''}</span>`;
       let left=dx+14, top=dy-20;
-      if (left+195>rect.width) left=dx-205;
+      if(left+195>rect.width) left=dx-205;
       tip.style.left=left+'px'; tip.style.top=top+'px'; tip.style.display='block';
     });
-    dot.addEventListener('mouseleave', ()=>{ tip.style.display='none'; });
+    dot.addEventListener('mouseleave',()=>{ tip.style.display='none'; });
   });
 }
 
 populateSelects();
-renderBlock('block-a', QA, null);
-renderBlock('block-b', QB, null);
+renderBlock('block-a',QA,null);
+renderBlock('block-b',QB,null);
 renderFbBlock(null);
 loadTasks();
 </script>
