@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Delegation Tool — Cartoonbase</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f3; --bg3: #eeede8;
+    --text: #1a1a18; --text2: #5f5e5a; --text3: #888780;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --radius: 8px; --radius-lg: 12px;
+    --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber-bg: #FAEEDA; --amber-text: #633806;
+    --blue-bg:  #E6F1FB; --blue-text:  #0C447C;
+    --gray-bg:  #F1EFE8; --gray-text:  #5F5E5A;
+    --green-dot:#639922; --amber-dot:#BA7517; --blue-dot:#185FA5; --gray-dot:#888780;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #323230;
+      --text: #e8e6de; --text2: #b4b2a9; --text3: #888780;
+      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
+      --green-bg:#3B6D11; --green-text:#C0DD97;
+      --amber-bg:#854F0B; --amber-text:#FAC775;
+      --blue-bg: #0C447C; --blue-text: #B5D4F4;
+      --gray-bg: #444441; --gray-text: #B4B2A9;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+  .app { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem; }
+  h1 { font-size: 22px; font-weight: 500; margin-top: 4px; }
+  .subtitle { font-size: 13px; color: var(--text2); }
+  .tabs { display: flex; gap: 4px; margin: 1.5rem 0 0; border-bottom: 0.5px solid var(--border); }
+  .tab { padding: 8px 18px; font-size: 14px; color: var(--text2); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+  .tab:hover:not(.active) { color: var(--text); }
+  .panel { display: none; padding-top: 1.5rem; }
+  .panel.active { display: block; }
+  .section { margin-bottom: 1.5rem; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--text2); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+  .row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .field label { font-size: 13px; color: var(--text2); }
+  .field input, .field select {
+    font-size: 14px; width: 100%; padding: 7px 10px;
+    border: 0.5px solid var(--border2); border-radius: var(--radius);
+    background: var(--bg); color: var(--text); outline: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--text); }
+  .q-row { display: flex; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .q-row:last-child { border-bottom: none; }
+  .q-ref { font-size: 12px; font-weight: 500; color: var(--text3); min-width: 24px; padding-top: 2px; }
+  .q-body { flex: 1; }
+  .q-text { font-size: 14px; line-height: 1.5; margin-bottom: 8px; }
+  .q-legend { display: flex; gap: 6px; margin-bottom: 6px; }
+  .q-legend span { font-size: 11px; color: var(--text3); flex: 1; text-align: center; }
+  .q-opts { display: flex; gap: 6px; }
+  .q-btn { flex: 1; padding: 5px 0; font-size: 13px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: none; cursor: pointer; color: var(--text2); text-align: center; }
+  .q-btn.sel { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .q-btn:hover:not(.sel) { background: var(--bg2); }
+  .score-bar { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+  .score-label { font-size: 13px; color: var(--text2); min-width: 64px; }
+  .score-track { flex: 1; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; background: var(--text); transition: width 0.3s; }
+  .score-val { font-size: 13px; font-weight: 500; min-width: 28px; text-align: right; }
+  .result-card { border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-top: 1rem; background: var(--bg2); }
+  .result-title { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .result-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .btn-p { padding: 8px 20px; font-size: 14px; font-weight: 500; border: none; border-radius: var(--radius); background: var(--text); color: var(--bg); cursor: pointer; }
+  .btn-p:hover { opacity: 0.85; }
+  .btn-s { padding: 8px 20px; font-size: 14px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: none; color: var(--text); cursor: pointer; }
+  .btn-s:hover { background: var(--bg2); }
+  textarea { width: 100%; font-size: 14px; font-family: inherit; resize: vertical; border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 8px 10px; background: var(--bg); color: var(--text); outline: none; }
+  textarea:focus { border-color: var(--text); }
+  .msg { font-size: 13px; color: var(--text2); }
+  .matrix-wrap { position: relative; }
+  .tooltip {
+    position: absolute; background: var(--bg); border: 0.5px solid var(--border2);
+    border-radius: var(--radius); padding: 8px 12px; font-size: 13px;
+    pointer-events: none; display: none; z-index: 10; min-width: 180px; line-height: 1.6;
+  }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--text); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading { font-size: 13px; color: var(--text2); padding: 1rem 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <p class="subtitle">Can we? Should we?</p>
+  <h1>AI delegation tool</h1>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('evaluate')">Evaluate a task</button>
+    <button class="tab" onclick="switchTab('feedback')">Post-test feedback</button>
+    <button class="tab" onclick="switchTab('map')">Collective map</button>
+  </div>
+
+  <!-- EVALUATE -->
+  <div id="panel-evaluate" class="panel active">
+    <div class="section">
+      <div class="row">
+        <div class="field">
+          <label>Task name</label>
+          <input type="text" id="task-name" placeholder="e.g. writing first draft of meeting notes" />
+        </div>
+        <div class="field" style="max-width:220px;">
+          <label>Your name</label>
+          <select id="task-author"><option value="">— select —</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Block A — Can we? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(operational)</span></div>
+      <div class="card" id="block-a"></div>
+      <div class="score-bar">
+        <span class="score-label">Score A</span>
+        <div class="score-track"><div class="score-fill" id="bar-a" style="width:0%"></div></div>
+        <span class="score-val" id="val-a">—</span>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Block B — Should we? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(identity / ethics)</span></div>
+      <div class="card" id="block-b"></div>
+      <div class="score-bar">
+        <span class="score-label">Score B</span>
+        <div class="score-track"><div class="score-fill" id="bar-b" style="width:0%"></div></div>
+        <span class="score-val" id="val-b">—</span>
+      </div>
+    </div>
+    <div id="result-area" style="display:none;">
+      <div class="result-card">
+        <div class="result-title" id="result-label"></div>
+        <div class="result-desc" id="result-desc"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:1.25rem;align-items:center;">
+      <button class="btn-p" onclick="submitTask()">Submit task</button>
+      <button class="btn-s" onclick="resetEval()">Reset</button>
+      <span class="msg" id="eval-msg"></span>
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="panel-feedback" class="panel">
+    <div class="section">
+      <div class="row">
+        <div class="field">
+          <label>Task</label>
+          <select id="fb-task"><option value="">— select a task —</option></select>
+        </div>
+        <div class="field" style="max-width:220px;">
+          <label>Your name</label>
+          <select id="fb-author"><option value="">— select —</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Feedback criteria</div>
+      <div class="card" id="block-fb"></div>
+    </div>
+    <div class="section">
+      <label style="font-size:13px;color:var(--text2);display:block;margin-bottom:6px;">Comment <span style="font-weight:400;">(optional)</span></label>
+      <textarea id="fb-comment" rows="3" placeholder="What worked, what didn't, what you'd do differently..."></textarea>
+    </div>
+    <div id="fb-result-area" style="display:none;">
+      <div class="result-card">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:4px;">Verdict</div>
+        <div class="result-title" id="fb-verdict"></div>
+        <div class="result-desc" id="fb-verdict-desc"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:1.25rem;align-items:center;">
+      <button class="btn-p" onclick="submitFeedback()">Submit feedback</button>
+      <span class="msg" id="fb-msg"></span>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div id="panel-map" class="panel">
+    <div class="section-label" style="margin-bottom:1rem;">All submitted tasks — hover a dot for details</div>
+    <div id="map-loading" class="loading"><span class="spinner"></span>Loading tasks...</div>
+    <div class="matrix-wrap" id="map-wrap" style="display:none;">
+      <svg id="matrix-svg" style="width:100%;" viewBox="0 0 620 520" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="tooltip" id="tip"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/a/macros/cartoonbase.com/s/AKfycbza7aPrknBltTRaKJAyaonCPtrjlIpt5mQMz8o84vWvwP0MPsdpes93tWZxsVfbU68/exec';
+
+const PEOPLE = ['Jérome Viguet','Rodolphe Duprey','Andrès Hertsens','Sergio Menendez','Coline Lejeune','Alix Garin','Sébastien Deom','Tim Roberts','Guillaume Franck','Noa Verhasselt','Antoine Durieux','Aristide Renault','Caroline De Cock','Simon Bisson','Hugues Charlier','Etienne Strubbe','Ludwig Oskarsson','Baptiste Villié','Elsa Mersayeva','Martin Saive','Karim Lasri','Marguerite Janssens','Dylan Everard','Julie Krengel','Louise Beaumond','Emilie Gueissaz','Rosie Rockley','Evelyne de Mevius','Thomas Doutrepont','Quentin Renson','Aurélie Baudry Hody','Manon Gigan','Wolfgang Heger','Tanguy Billiet','Alix Bonnet','Sarah Sassenus','Paulien Caenepeel','Julia Soumoy','Savine Dalies','Florine Le Moine','Roxane Lechevalier','Floriane Bouétard'];
+
+const QA = [
+  { ref:'A1', text:'Does this task follow a repeatable, predictable process?', labels:['Never the same','Often the same','Always the same'] },
+  { ref:'A2', text:'How well do you currently master this task?', labels:['Poorly','Correctly','Very well'] },
+  { ref:'A3', text:'Overall, do you feel AI could do this work in your place?', labels:['No','Partially','Yes, clearly'] },
+  { ref:'A4', text:'Could AI enable you to do things you currently can\'t?', labels:['No','Maybe','Yes, clearly'] },
+];
+const QB = [
+  { ref:'B1', text:'Is this task part of what makes Cartoonbase distinct from competitors?', labels:['No','Partially','Yes, clearly'] },
+  { ref:'B2', text:'Do you enjoy doing this task?', labels:['No','Neutral','Yes'] },
+  { ref:'B3', text:'What is the cost of an error on this task?', labels:['Low','Medium','High'] },
+];
+const QF = [
+  { ref:'gain',     text:'Real time savings',      labels:['None','Partial','Significant'] },
+  { ref:'quality',  text:'Quality of AI output',   labels:['Insufficient','Acceptable','Good'] },
+  { ref:'friction', text:'Friction experienced',   labels:['Very smooth','Some adjustments','A lot of friction'] },
+];
+
+const QUAD_INFO = {
+  opportunity: { label:'Clear opportunity', desc:'Test it. AI can handle this and it\'s not what makes the soul of Cartoonbase.', dot:'#639922' },
+  tension:     { label:'Zone of tension',   desc:'Technically delegable, but this task matters for the agency\'s identity. Collective decision, not individual.', dot:'#BA7517' },
+  human:       { label:'Keep it human',     desc:'Guideline, not a judgment. The task is central and AI can\'t do it correctly yet.', dot:'#185FA5' },
+  notpriority: { label:'Not a priority',    desc:'Neither feasible nor useful to delegate right now. Revisit in a few months.', dot:'#888780' },
+};
+
+const QUAD_FILL = {
+  light: { opportunity:'#EAF3DE', tension:'#FAEEDA', human:'#E6F1FB', notpriority:'#F1EFE8' },
+  dark:  { opportunity:'#3B6D11', tension:'#854F0B', human:'#0C447C', notpriority:'#444441' },
+};
+const QUAD_TEXT = {
+  light: { opportunity:'#27500A', tension:'#633806', human:'#0C447C', notpriority:'#5F5E5A' },
+  dark:  { opportunity:'#C0DD97', tension:'#FAC775', human:'#B5D4F4', notpriority:'#B4B2A9' },
+};
+
+let sc = {}, fbSc = {}, tasks = [], mapLoaded = false;
+
+function getQ(a, b) {
+  if (a >= 2 && b >= 2) return 'tension';
+  if (a >= 2 && b < 2)  return 'opportunity';
+  if (a < 2  && b >= 2) return 'human';
+  return 'notpriority';
+}
+function avg(keys) {
+  const v = keys.map(k => sc[k]).filter(x => x !== undefined);
+  return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null;
+}
+
+function populateSelects() {
+  ['task-author','fb-author'].forEach(id => {
+    document.getElementById(id).innerHTML = '<option value="">— select —</option>' + PEOPLE.map(p=>`<option>${p}</option>`).join('');
+  });
+}
+
+function renderBlock(id, questions, defaults) {
+  document.getElementById(id).innerHTML = questions.map(q => `
+    <div class="q-row">
+      <span class="q-ref">${q.ref}</span>
+      <div class="q-body">
+        <div class="q-text">${q.text}</div>
+        <div class="q-legend">
+          ${q.labels.map(l=>`<span>${l}</span>`).join('')}
+        </div>
+        <div class="q-opts">
+          ${q.labels.map((_,i)=>`<button class="q-btn${defaults&&defaults[q.ref]===i+1?' sel':''}" onclick="pick('${q.ref}',${i+1},this)">${i+1}</button>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+  if (defaults) { questions.forEach(q=>{ sc[q.ref]=defaults[q.ref]; }); refreshScores(); }
+}
+
+function renderFbBlock(defaults) {
+  document.getElementById('block-fb').innerHTML = QF.map(q => `
+    <div class="q-row">
+      <div class="q-body" style="flex:1;">
+        <div class="q-text">${q.text}</div>
+        <div class="q-legend">
+          ${q.labels.map(l=>`<span>${l}</span>`).join('')}
+        </div>
+        <div class="q-opts">
+          ${q.labels.map((_,i)=>`<button class="q-btn${defaults&&defaults[q.ref]===i+1?' sel':''}" onclick="pickFb('${q.ref}',${i+1},this)">${i+1}</button>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+  if (defaults) { QF.forEach(q=>{ fbSc[q.ref]=defaults[q.ref]; }); refreshFbVerdict(); }
+}
+
+function pick(ref, val, btn) {
+  sc[ref] = val;
+  btn.closest('.q-opts').querySelectorAll('.q-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  refreshScores();
+}
+function pickFb(ref, val, btn) {
+  fbSc[ref] = val;
+  btn.closest('.q-opts').querySelectorAll('.q-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  refreshFbVerdict();
+}
+
+function refreshScores() {
+  const a = avg(['A1','A2','A3','A4']);
+  const b = avg(['B1','B2','B3']);
+  if (a!==null) { document.getElementById('bar-a').style.width=((a-1)/2*100)+'%'; document.getElementById('val-a').textContent=a.toFixed(1); }
+  if (b!==null) { document.getElementById('bar-b').style.width=((b-1)/2*100)+'%'; document.getElementById('val-b').textContent=b.toFixed(1); }
+  if (QA.every(q=>sc[q.ref]) && QB.every(q=>sc[q.ref]) && a!==null && b!==null) {
+    const qi = QUAD_INFO[getQ(a,b)];
+    document.getElementById('result-label').textContent = qi.label;
+    document.getElementById('result-desc').textContent = qi.desc;
+    document.getElementById('result-area').style.display = 'block';
+  }
+}
+
+function refreshFbVerdict() {
+  const { gain, quality, friction } = fbSc;
+  if (!gain || !quality || !friction) return;
+  let v, d;
+  if (gain >= 2 && quality >= 2 && friction <= 2) { v='Integrate'; d='Time saved, quality met, friction manageable. Roll this out.'; }
+  else if (gain >= 2 || quality >= 2) { v='Adjust before integrating'; d='Some value, but needs refinement before becoming a default.'; }
+  else { v='Abandon'; d='Not worth the cost right now. Park it.'; }
+  document.getElementById('fb-verdict').textContent = v;
+  document.getElementById('fb-verdict-desc').textContent = d;
+  document.getElementById('fb-result-area').style.display = 'block';
+}
+
+async function apiFetch(params) {
+  const url = SCRIPT_URL + '?' + new URLSearchParams(params);
+  const r = await fetch(url);
+  return r.json();
+}
+async function apiPost(data) {
+  const r = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(data) });
+  return r.json();
+}
+
+async function loadTasks() {
+  try {
+    const data = await apiFetch({ action:'getTasks' });
+    tasks = Array.isArray(data) ? data.map(t => ({
+      name: t.name, author: t.author,
+      sA: parseFloat(t.scoreA), sB: parseFloat(t.scoreB),
+      q: t.quadrant
+    })) : [];
+  } catch(e) { tasks = []; }
+  refreshFbTaskSelect();
+}
+
+function refreshFbTaskSelect() {
+  const s = document.getElementById('fb-task');
+  const cur = s.value;
+  s.innerHTML = '<option value="">— select a task —</option>' + tasks.map(t=>`<option value="${t.name}">${t.name} — ${t.author}</option>`).join('');
+  if (cur) s.value = cur;
+}
+
+async function submitTask() {
+  const name = document.getElementById('task-name').value.trim();
+  const author = document.getElementById('task-author').value;
+  const a = avg(['A1','A2','A3','A4']);
+  const b = avg(['B1','B2','B3']);
+  const msg = document.getElementById('eval-msg');
+  if (!name)   { msg.textContent='Please enter a task name.'; return; }
+  if (!author) { msg.textContent='Please select your name.'; return; }
+  if (!QA.every(q=>sc[q.ref]) || !QB.every(q=>sc[q.ref])) { msg.textContent='Please answer all questions.'; return; }
+  msg.innerHTML = '<span class="spinner"></span>Saving...';
+  try {
+    await apiPost({ action:'postTask', name, author, ...sc, scoreA: parseFloat(a.toFixed(2)), scoreB: parseFloat(b.toFixed(2)), quadrant: getQ(a,b) });
+    await loadTasks();
+    mapLoaded = false;
+    msg.textContent = '✓ Task submitted.';
+    setTimeout(()=>{ msg.textContent=''; }, 2500);
+  } catch(e) { msg.textContent = 'Error saving. Please retry.'; }
+}
+
+async function submitFeedback() {
+  const task = document.getElementById('fb-task').value;
+  const author = document.getElementById('fb-author').value;
+  const msg = document.getElementById('fb-msg');
+  if (!task || !author) { msg.textContent='Please select a task and your name.'; return; }
+  if (!QF.every(q=>fbSc[q.ref])) { msg.textContent='Please answer all criteria.'; return; }
+  const { gain, quality, friction } = fbSc;
+  let verdict;
+  if (gain >= 2 && quality >= 2 && friction <= 2) verdict = 'Integrate';
+  else if (gain >= 2 || quality >= 2) verdict = 'Adjust';
+  else verdict = 'Abandon';
+  msg.innerHTML = '<span class="spinner"></span>Saving...';
+  try {
+    await apiPost({ action:'postFeedback', task, author, ...fbSc, comment: document.getElementById('fb-comment').value, verdict });
+    msg.textContent = '✓ Feedback submitted.';
+    setTimeout(()=>{ msg.textContent=''; }, 2500);
+  } catch(e) { msg.textContent = 'Error saving. Please retry.'; }
+}
+
+function resetEval() {
+  sc = {};
+  document.getElementById('task-name').value = '';
+  document.getElementById('task-author').value = '';
+  document.getElementById('result-area').style.display = 'none';
+  ['bar-a','bar-b'].forEach(id=>{ document.getElementById(id).style.width='0%'; });
+  ['val-a','val-b'].forEach(id=>{ document.getElementById(id).textContent='—'; });
+  renderBlock('block-a', QA, null);
+  renderBlock('block-b', QB, null);
+}
+
+function switchTab(tab) {
+  ['evaluate','feedback','map'].forEach((t,i)=>{
+    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+    document.querySelectorAll('.tab')[i].classList.toggle('active', t===tab);
+  });
+  if (tab==='map' && !mapLoaded) { mapLoaded=true; renderMatrix(); }
+}
+
+async function renderMatrix() {
+  document.getElementById('map-loading').style.display = 'block';
+  document.getElementById('map-wrap').style.display = 'none';
+  await loadTasks();
+  document.getElementById('map-loading').style.display = 'none';
+  document.getElementById('map-wrap').style.display = 'block';
+
+  const svg = document.getElementById('matrix-svg');
+  const W=620, H=520;
+  const pad={top:44,right:44,bottom:64,left:64};
+  const iW=W-pad.left-pad.right, iH=H-pad.top-pad.bottom;
+  const cx=pad.left+iW/2, cy=pad.top+iH/2;
+  const dark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const fills = dark ? QUAD_FILL.dark : QUAD_FILL.light;
+  const texts = dark ? QUAD_TEXT.dark : QUAD_TEXT.light;
+  const muted = '#888780';
+  const border = dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
+
+  function toX(a){ return pad.left+((a-1)/2)*iW; }
+  function toY(b){ return pad.top+iH-((b-1)/2)*iH; }
+
+  const quads = [
+    { id:'human',       x:pad.left, y:pad.top, w:iW/2, h:iH/2, label:'Keep it human',    ax:'start', lx:pad.left+10,    ly:pad.top+22 },
+    { id:'tension',     x:cx,       y:pad.top, w:iW/2, h:iH/2, label:'Zone of tension',   ax:'end',   lx:pad.left+iW-10, ly:pad.top+22 },
+    { id:'notpriority', x:pad.left, y:cy,      w:iW/2, h:iH/2, label:'Not a priority',    ax:'start', lx:pad.left+10,    ly:cy+22 },
+    { id:'opportunity', x:cx,       y:cy,      w:iW/2, h:iH/2, label:'Clear opportunity', ax:'end',   lx:pad.left+iW-10, ly:cy+22 },
+  ];
+
+  let html = `<rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
+  quads.forEach(q=>{
+    html += `<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" fill="${fills[q.id]}"/>`;
+    html += `<text x="${q.lx}" y="${q.ly}" font-size="13" font-family="inherit" font-weight="500" fill="${texts[q.id]}" text-anchor="${q.ax}">${q.label}</text>`;
+  });
+  html += `<line x1="${cx}" y1="${pad.top}" x2="${cx}" y2="${pad.top+iH}" stroke="${border}" stroke-width="1"/>`;
+  html += `<line x1="${pad.left}" y1="${cy}" x2="${pad.left+iW}" y2="${cy}" stroke="${border}" stroke-width="1"/>`;
+  html += `<rect x="${pad.left}" y="${pad.top}" width="${iW}" height="${iH}" fill="none" stroke="${border}" stroke-width="0.5"/>`;
+  html += `<text x="${pad.left+iW/2}" y="${H-14}" font-size="12" font-family="inherit" fill="${muted}" text-anchor="middle">Can we? (score A →)</text>`;
+  html += `<text x="14" y="${pad.top+iH/2}" font-size="12" font-family="inherit" fill="${muted}" text-anchor="middle" transform="rotate(-90,14,${pad.top+iH/2})">Should we? (score B ↑)</text>`;
+  [1,1.5,2,2.5,3].forEach(v=>{
+    html += `<text x="${toX(v)}" y="${pad.top+iH+18}" font-size="11" font-family="inherit" fill="${muted}" text-anchor="middle">${v}</text>`;
+    html += `<text x="${pad.left-8}" y="${toY(v)+4}" font-size="11" font-family="inherit" fill="${muted}" text-anchor="end">${v}</text>`;
+  });
+
+  if (tasks.length === 0) {
+    html += `<text x="${pad.left+iW/2}" y="${pad.top+iH/2}" font-size="14" font-family="inherit" fill="${muted}" text-anchor="middle">No tasks submitted yet.</text>`;
+  } else {
+    tasks.forEach((t,i)=>{
+      const x=toX(t.sA), y=toY(t.sB);
+      html += `<circle cx="${x}" cy="${y}" r="9" fill="${QUAD_INFO[t.q]?.dot||'#888780'}" opacity="0.85" style="cursor:pointer" data-i="${i}"/>`;
+    });
+  }
+
+  svg.innerHTML = html;
+
+  const tip = document.getElementById('tip');
+  svg.querySelectorAll('circle').forEach(dot=>{
+    dot.addEventListener('mouseenter', ()=>{
+      const t = tasks[+dot.dataset.i];
+      if (!t) return;
+      const rect = svg.getBoundingClientRect();
+      const scaleX = rect.width/W, scaleY = rect.height/H;
+      const dx = parseFloat(dot.getAttribute('cx'))*scaleX;
+      const dy = parseFloat(dot.getAttribute('cy'))*scaleY;
+      tip.innerHTML = `<strong>${t.name}</strong><br><span style="color:var(--text2);font-size:12px;">${t.author}</span><br><span style="font-size:12px;margin-top:2px;display:block;">A: ${t.sA} · B: ${t.sB}</span><span style="font-size:12px;color:${QUAD_INFO[t.q]?.dot||'#888'}">${QUAD_INFO[t.q]?.label||''}</span>`;
+      let left=dx+14, top=dy-20;
+      if (left+195>rect.width) left=dx-205;
+      tip.style.left=left+'px'; tip.style.top=top+'px'; tip.style.display='block';
+    });
+    dot.addEventListener('mouseleave', ()=>{ tip.style.display='none'; });
+  });
+}
+
+populateSelects();
+renderBlock('block-a', QA, null);
+renderBlock('block-b', QB, null);
+renderFbBlock(null);
+loadTasks();
+</script>
+</body>
+</html>
